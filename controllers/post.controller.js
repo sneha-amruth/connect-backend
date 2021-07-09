@@ -75,4 +75,13 @@ exports.createPost = async(req, res) => {
    }
  }
 
- 
+ exports.getPostsByUser = async(req, res) => {
+   try {
+     const userId = req.params.userId;
+     const allPostsOfAUser = await Post.find({userId});
+     res.status(200).json({ success: true, data: allPostsOfAUser});
+   } catch(err) {
+     res.status(500).json({ success: false, message: "unable to fetch users post", 
+    errorMessage: err.message })
+   }
+ }

@@ -10,6 +10,6 @@ router.get("/", getAllPosts);
 router.post("/", authVerify, createPost);
 router.delete("/:postId", authVerify, getPostById, deletePost);
 router.post("/:postId", authVerify, likePost); //also create notif
-router.get("/:userId", authVerify, getPostsByUser);
+//router.get("/:userId", authVerify, getPostsByUser);
 
 module.exports = router;

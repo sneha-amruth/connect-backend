@@ -49,10 +49,30 @@ exports.createPost = async(req, res) => {
  exports.likePost = async(req, res) => {
    try {
      const { user, post } = req;
-     
+     const { likesCount } = req.body;
+     const alreadyLiked = post.likes.likedUsers.find(item => item._id.equals(user._id));
+
+     if(alreadyLiked) {
+       let updatedPost = await post.likes.likedUsers.id(user._id).remove()
+       updatedPost = {...post, likes: {...post.likes, likesCount}};
+        updatedPost = extend(post, updatedPost)
+       await updatedPost.save();
+        res.status(200).json({ success: true, message: "removed like from post"});
+     } else {
+       let updatedPost = {...post, 
+          likes: {
+            likesCount,
+            likedUsers: post.likes.likedUsers.concat({_id: user._id})
+       }};
+       updatedPost = extend(post, updatedPost)
+        await updatedPost.save();
+         res.status(200).json({ success: true, data: updatedPost,  message: "liked the post"});
+     }
 
    } catch(err) {
      res.status(500).json({ success: false, message: "unable to like or remove like from post", 
     errorMessage: err.message })
    }
  }
+
+ 

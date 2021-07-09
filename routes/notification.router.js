@@ -5,7 +5,7 @@ const { authVerify } = require("../middlewares/authVerify");
 const { createNotification, getNotificationsOfUser } = require("../controllers/notification.controller");
 
 router.post("/:userId", authVerify, createNotification);
-router.get("/:userId", authVerify, getNotificationsOfUser);
+router.get("/", authVerify, getNotificationsOfUser);
 
 
 module.exports = router;

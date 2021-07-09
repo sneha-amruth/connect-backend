@@ -12,8 +12,8 @@ app.use("/api/user", userRoutes);
 const postRoutes = require("./routes/post.router")
 app.use("/api/post", postRoutes);
 
-// const notificationRoutes = require("./routes/notification.router")
-// app.use("/api/notif", notificationRoutes);
+const notificationRoutes = require("./routes/notification.router")
+app.use("/api/notif", notificationRoutes);
 
 const { initializeDbConnection } = require("./db/db.connect");
 initializeDbConnection();

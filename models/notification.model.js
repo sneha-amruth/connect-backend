@@ -12,7 +12,7 @@ const NotificationSchema = new mongoose.Schema({
   },
   activity: {
     type: String,
-    enum: [like, follow]
+    enum: ["like", "follow"]
   },
   post: {
     type: mongoose.Schema.Types.ObjectId,

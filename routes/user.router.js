@@ -14,7 +14,7 @@ router.post("/login", loginUser);
 router.get("/", authVerify, getAllUsers);
 router.get("/:userId", authVerify, getUserDetails);
 router.post("/bio/:userId", authVerify, updateUserBio);
-router.post("/follow/:userId", authVerify, updateFollowAndFollowingOnFollow); //also create notif
-router.post("/unfollow/:userId", authVerify, updateFollowAndFollowingOnUnFollow);
+router.post("/follow", authVerify, updateFollowAndFollowingOnFollow); 
+router.post("/unfollow", authVerify, updateFollowAndFollowingOnUnFollow);
 
 module.exports = router;

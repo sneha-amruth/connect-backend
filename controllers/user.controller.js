@@ -1,5 +1,6 @@
 const { extend } = require("lodash");
 const { User } = require("../models/user.model");
+const { createNotification } = require("./notification.controller");
 
 exports.getAllUsers = async(req, res) => {
   try{
@@ -50,6 +51,8 @@ exports.updateFollowAndFollowingOnFollow = async(req, res) => {
       userId: user._id
     })
     await followUser.save();
+
+    await createNotification(followUser, user._id, "follow");
 
     const users = await User.find();
      res.status(200).json({ success: true, data: users});

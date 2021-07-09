@@ -1,6 +1,7 @@
 const { extend } = require("lodash");
 const { User } = require("../models/user.model");
 const { Post } = require("../models/post.model");
+const { createNotification } = require("./notification.controller");
 
 exports.getAllPosts = async(req, res) => {
    try {
@@ -66,7 +67,8 @@ exports.createPost = async(req, res) => {
        }};
        updatedPost = extend(post, updatedPost)
         await updatedPost.save();
-         res.status(200).json({ success: true, data: updatedPost,  message: "liked the post"});
+        await createNotification(post.userId, user._id, "like", post);
+        res.status(200).json({ success: true, data: updatedPost,  message: "liked the post"});
      }
 
    } catch(err) {

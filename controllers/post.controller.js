@@ -5,7 +5,7 @@ const { createNotification } = require("./notification.controller");
 
 exports.getAllPosts = async(req, res) => {
    try {
-     const allPosts = await Post.find({});
+     const allPosts = await Post.find({}).populate('userId');
       res.status(200).json({ success: true, data: allPosts});
    } catch(err) {
     res.status(500).json({ success: false, message: "unable to get all posts", 
@@ -25,6 +25,17 @@ exports.createPost = async(req, res) => {
     res.status(200).json({ success: true, data: NewPost});
   } catch(err) {
     res.status(500).json({ success: false, message: "unable to create post", 
+    errorMessage: err.message })
+   }
+ }
+
+ exports.getPost = async(req, res) => {
+   try {
+     const { user, post } = req;
+     const postDetails = await Post.find({_id: post._id});
+     res.status(200).json({ success: true, data: postDetails})
+   } catch(err) {
+     res.status(500).json({ success: false, message: "unable to delete post", 
     errorMessage: err.message })
    }
  }
@@ -49,26 +60,26 @@ exports.createPost = async(req, res) => {
 
  exports.likePost = async(req, res) => {
    try {
-     const { user, post } = req;
+     let { user, post } = req;
      const { likesCount } = req.body;
      const alreadyLiked = post.likes.likedUsers.find(item => item._id.equals(user._id));
-
      if(alreadyLiked) {
        let updatedPost = await post.likes.likedUsers.id(user._id).remove()
-       updatedPost = {...post, likes: {...post.likes, likesCount}};
-        updatedPost = extend(post, updatedPost)
+       updatedPost = {...post};
+       updatedPost = extend(post, updatedPost);
+       updatedPost.likes.likesCount = likesCount-1;
        await updatedPost.save();
-        res.status(200).json({ success: true, message: "removed like from post"});
+       res.status(200).json({ success: true, data: updatedPost,  message: "removed like from post"});
      } else {
        let updatedPost = {...post, 
           likes: {
-            likesCount,
+            likesCount: likesCount+1,
             likedUsers: post.likes.likedUsers.concat({_id: user._id})
        }};
-       updatedPost = extend(post, updatedPost)
-        await updatedPost.save();
-        await createNotification(post.userId, user._id, "like", post);
-        res.status(200).json({ success: true, data: updatedPost,  message: "liked the post"});
+      updatedPost = extend(post, updatedPost)
+      await updatedPost.save();
+      await createNotification(post.userId, user._id, "like", post);
+      res.status(200).json({ success: true, data: updatedPost,  message: "liked the post"});
      }
 
    } catch(err) {

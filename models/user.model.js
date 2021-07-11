@@ -24,7 +24,6 @@ const UserSchema = new mongoose.Schema({
   password: {
     type: String,
     required: "Please enter your password",
-    select: false
   },
   username: {
     type: String,

@@ -13,7 +13,7 @@ router.post("/register", createNewUser);
 router.post("/login", loginUser);
 router.get("/", authVerify, getAllUsers);
 router.get("/:userId", authVerify, getUserDetails);
-router.post("/bio/:userId", authVerify, updateUserBio);
+router.post("/bio", authVerify, updateUserBio);
 router.post("/follow", authVerify, updateFollowAndFollowingOnFollow); 
 router.post("/unfollow", authVerify, updateFollowAndFollowingOnUnFollow);
 
